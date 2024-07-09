@@ -110,6 +110,67 @@
 <!-- /Wrapper -->
 
 <#include "/templates/web/fragments/scripts.ftl">
+
+<script>
+    var crafterSocial_cfg = {
+        'comments.acceptTerms'          : false, // if user has to accept terms before posting or replying comment
+        'url.service': 'http://localhost:8080/crafter-social/api/3/',
+        'url.security.value': 'http://localhost:8080/crafter-social/crafter-security-login',
+        'url.security.active': 'http://localhost:8080/crafter-social/crafter-security-current-auth',
+        'url.base': '/static-assets/sui/',
+        'url.templates': '/static-assets/sui/templates/',
+
+    };
+</script>
+
+<script>
+	$.ajax({
+		method: "POST",
+		url: "http://localhost:8080/crafter-social/crafter-security-login",
+		data: {username: "admin", password: "admin"}
+	})
+			.done(function (msg) {
+				console.log('logged in!');
+			});
+</script>
+
+<script>
+	function crafterSocial_onAppReady ( director, CrafterSocial ) {
+	    window.CKEDITOR.plugins.basePath = '/static-assets/sui/libs/ckeditor/plugins/';
+
+        CrafterSocial.$.extend(CrafterSocial.string.LOCALE,{
+            months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+            days: ['Sunday','Monday','Tuesday','Wednesday', 'Thursday','Friday','Saturday'],
+            'commentable.view-comment': 'View & Comment',
+            'commentable.notify-comment':'Notify on Reply',
+            'popover.no-comment':'(no comments)',
+            'discussion.comment':'Be the first to comment!',
+            'discussion.login-comment':'Login to comment!',
+            'options.options':'Options',
+            'options.inline':'Inline View',
+            'options.lightbox':'Lightbox View',
+            'options.bubble' :'Bubble View',
+            'options.refresh':'Refresh',
+            'options.close':'Close'
+        });
+
+		director.socialise({
+			target: '#sui-test',
+			context: 'f5b143c2-f1c0-4a10-b56e-f485f00d3fe9',
+			view:{
+				'parasite':{
+					'cfg':{
+						'discussionView':'view.Inline'
+					}
+				}
+			}
+		});
+	}
+</script>
+
+<script src="/static-assets/sui/scripts/social.js"></script>
+
+
 <@crafter.body_bottom/>
 
 </body>
