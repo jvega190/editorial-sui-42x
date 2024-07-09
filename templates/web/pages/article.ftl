@@ -107,7 +107,7 @@
     }
 </script>
 
-<script src="/static-assets/sui2/alt/scripts/social.js"></script>
+<script src="/static-assets/sui/scripts/social.js"></script>
 
 <script>
     $.ajax({
