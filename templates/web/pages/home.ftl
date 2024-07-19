@@ -8,6 +8,9 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="/static-assets/sui/styles/main.css"/>
+  <link rel="stylesheet" href="/static-assets/sui/styles/editor-content.css"/>
+
   <#include "/templates/web/fragments/head.ftl">
   <@crafter.head/>
 </head>
@@ -40,6 +43,9 @@
         </span>
       </section>
       <!-- /Banner -->
+
+      <li class="active"><a href="javascript:crafter.social.getDirector().authenticate()" id="login" class="log-event">Login</a></li>
+      <h1 id="sui-test">Using ui build!</h1>
 
       <!-- Section: Features -->
       <section>
@@ -130,7 +136,7 @@
 		data: {username: "admin", password: "admin"}
 	})
 			.done(function (msg) {
-				console.log('logged in!');
+				console.log('logged in!', msg);
 			});
 </script>
 
