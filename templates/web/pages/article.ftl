@@ -8,6 +8,9 @@
 -->
 <html lang="en">
 <head>
+	<link rel="stylesheet" href="/static-assets/sui2/alt/styles/main.css"/>
+	<link rel="stylesheet" href="/static-assets/sui2/alt/styles/editor-content.css"/>
+
 	<#include "/templates/web/fragments/head.ftl">
 	<@crafter.head/>
 </head>
@@ -25,6 +28,9 @@
 
 			<!-- Content -->
 			<section>
+				<li class="active"><a href="javascript:crafter.social.getDirector().authenticate()" id="login" class="log-event">Login</a></li>
+				<h1 id="sui-test">Using ui build!</h1>
+
 				<header class="main">
           <@crafter.h1 $field="subject_t">
             ${contentModel.subject_t!""}
@@ -71,74 +77,61 @@
 <#include "/templates/web/fragments/scripts.ftl">
 
 <script>
-    var crafterSocial_cfg = {
-        'comments.acceptTerms'          : false, // if user has to accept terms before posting or replying comment
-        'url.service': 'http://localhost:8080/crafter-social/api/3/',
-        'url.security.value': 'http://localhost:8080/crafter-social/crafter-security-login',
-        'url.security.active': 'http://localhost:8080/crafter-social/crafter-security-current-auth',
-        'url.base': '/static-assets/sui2/alt/',
-        'url.templates': '/static-assets/sui2/alt/templates/'
-    };
+	var crafterSocial_cfg = {
+		'comments.acceptTerms': false, // if user has to accept terms before posting or replying comment
+		'url.service': 'http://localhost:8080/crafter-social/api/3/',
+		'url.security.value': 'http://localhost:8080/crafter-social/crafter-security-login',
+		'url.security.active': 'http://localhost:8080/crafter-social/crafter-security-current-auth',
+		'url.base': '/static-assets/sui2/alt/',
+		'url.templates': '/static-assets/sui2/alt/templates/'
+	};
+</script>
 
-    function crafterSocial_onAppReady ( director, CrafterSocial ) {
-        window.CKEDITOR.plugins.basePath = '/static-assets/sui/libs/ckeditor/plugins/';
+<script>
+	$.ajax({
+		method: "POST",
+		url: "http://localhost:8080/crafter-social/crafter-security-login",
+		data: {username: "admin", password: "admin"}
+	}).done(function (msg) {
+		console.log('logged in!', msg);
+	});
+</script>
 
-        CrafterSocial.$.extend(CrafterSocial.string.LOCALE, {
-            'commentable.view-comment': 'View & Comment',
-            'commentable.notify-comment': 'Notify on Reply',
-            'popover.no-comment': '(no comments)',
-            'discussion.title': 'Discussion',
-            'discussion.comment': 'Be the first to comment!',
-            'discussion.login-comment': '',
-            'options.options': 'Options',
-            'options.inline': 'Inline View',
-            'options.lightbox': 'Lightbox View',
-            'options.bubble': 'Bubble View',
-            'options.refresh': 'Refresh',
-            'options.close': 'Close',
-            'commenting.submissionLabel': 'Your submission will not appear until approved by the blog admin.',
-            'commenting.agreeTermsLabel': 'I have read and agree to Terms of Use of this blog',
-            'commenting.agreeTermsLinkText': 'LINK HERE',
-            'commenting.agreeTermsLink': '#',
-            'comments.flag': 'Report',
-            'commenting.attachmentsTip': 'Adding photos? Post your comment then add them to your post.'
-        });
+<script>
+	function crafterSocial_onAppReady ( director, CrafterSocial ) {
+		window.CKEDITOR.plugins.basePath = '/static-assets/sui/libs/ckeditor/plugins/';
 
-    }
+		CrafterSocial.$.extend(CrafterSocial.string.LOCALE,{
+			months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+			days: ['Sunday','Monday','Tuesday','Wednesday', 'Thursday','Friday','Saturday'],
+			'commentable.view-comment': 'View & Comment',
+			'commentable.notify-comment':'Notify on Reply',
+			'popover.no-comment':'(no comments)',
+			'discussion.comment':'Be the first to comment!',
+			'discussion.login-comment':'Login to comment!',
+			'options.options':'Options',
+			'options.inline':'Inline View',
+			'options.lightbox':'Lightbox View',
+			'options.bubble' :'Bubble View',
+			'options.refresh':'Refresh',
+			'options.close':'Close'
+		});
+
+		director.socialise({
+			target: '#sui-test',
+			context: 'f5b143c2-f1c0-4a10-b56e-f485f00d3fe9',
+			view:{
+				'parasite':{
+					'cfg':{
+						'discussionView':'view.Inline'
+					}
+				}
+			}
+		});
+	}
 </script>
 
 <script src="/static-assets/sui2/alt/scripts/social.js"></script>
-
-<script>
-    $.ajax({
-        method: "POST",
-        url: "http://localhost:8080/crafter-social/crafter-security-login",
-        data: {username: "admin", password: "admin"}
-    })
-        .done(function (msg) {
-            // alert( "login successful" );
-        });
-</script>
-
-<script>
-    crafter.social.getDirector().on(crafter.social.Constants.get('EVENT_USER_AUTHENTICATION_SUCCESS'), function
-        (profile) {
-        var director = crafter.social.getDirector();
-
-        director.socialise({
-            target: '#${contentModel.objectId}',
-            context: 'f5b143c2-f1c0-4a10-b56e-f485f00d3fe9',
-            view: {
-                'parasite': {
-                    'cfg': {
-                        'discussionView': 'view.Inline'
-                    }
-                }
-            }
-        });
-    });
-</script>
-
 
 <@crafter.body_bottom/>
 </body>
